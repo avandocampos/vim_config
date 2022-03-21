@@ -59,10 +59,6 @@ echo "Criando os diretório ~/.vim/autoload e ~/.vim/bundle"
 mkdir -p /home/$username/.vim/autoload 
 mkdir -p /home/$username/.vim/bundle
 
-# Mudando o usuário e grupo dos diretórios criados
-# Os diretórios são criados como root porque o script é executando com sudo
-chown -R $username:$username /home/$username/.vim
-
 # Verifica se o arquivo .vimrc existe e não está vazio
 if [ -e /home/$username/.vimrc ]; then
     echo -ne "O arquivo .vimrc já existe. Deseja exclui-lo? [S/n]: "
@@ -99,6 +95,10 @@ git clone https://github.com/vim-airline/vim-airline /home/$username/.vim/bundle
 git clone https://github.com/vim-airline/vim-airline-themes /home/$username/.vim/bundle/airline-themes
 git clone https://github.com/sheerun/vim-polyglot /home/$username/.vim/bundle/polyglot
 git clone https://github.com/voldikss/vim-floaterm /home/$username/.vim/bundle/floaterm
+
+# Mudando o usuário e grupo dos diretórios criados
+# Os diretórios são criados como root porque o script é executando com sudo
+chown -R $username:$username /home/$username/.vim
 
 echo "Os seguintes plugins foram instalados"
 echo "nerdtree"
