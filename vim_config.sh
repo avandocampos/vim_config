@@ -1,19 +1,22 @@
 #!/bin/bash
 
 # Atualizando as informações do repositório
-sudo apt-get update
-
+# sudo apt-get update
+dnf update -y
 # Verifica se os aplicativos necesários estão instalados
 if [ ! $(command -v vim) ]; then
-    apt-get install -y vim
+    # apt-get install -y vim
+    dnf install -y vim
 fi
 
 if [ ! $(command -v git) ]; then
-   apt-get install -y git
+   # apt-get install -y git
+   dnf install -y git
 fi
 
 if [ ! $(command -v curl) ]; then
-   apt-get install -y git
+   # apt-get install -y curl
+   dnf install -y curl
 fi
 
 echo -ne "Digite o usuário para o qual deseja configurar o VIM: "
@@ -41,26 +44,33 @@ if [ -d /home/$username/.vim ]; then
         echo "É importando que nenhuma configuração anterior esteja aplicada para evitar conflito."
         echo "Faça backup do diretório .vim antes de tentar novamente e exclua-o."
         exit 0
-    else
-        echo "BYPASS"
+    elif [ $user_choice = 'S' -o $user_choice = 's' ]; then
         echo "Excluindo o diretório .vim e os subdiretório nele contidos..."
-#        rm -rf /home/$username/.vim
+        rm -rf /home/$username/.vim
+    else
+        echo "Opção desconhecida!"
+        exit 0
     fi
 fi
 
 # Criando os diretórios que conterão os plugins.
+
+echo "Criando os diretório ~/.vim/autoload e ~/.vim/bundle"
 mkdir -p /home/$username/.vim/autoload 
 mkdir -p /home/$username/.vim/bundle
 
+# Mudando o usuário e grupo dos diretórios criados
+# Os diretórios são criados como root porque o script é executando com sudo
+chown -R $username:$username /home/$username/.vim
+
 # Verifica se o arquivo .vimrc existe e não está vazio
-if [ -e /home/$username/.vimrc -a -s /home/$username/.vimrc ]; then
-    echo -ne "O arquivo .vimrc já existe e contem dados. Deseja exclui-lo? [S/n]: "
+if [ -e /home/$username/.vimrc ]; then
+    echo -ne "O arquivo .vimrc já existe. Deseja exclui-lo? [S/n]: "
     read user_choice
-    
-    elif [ $user_choice = 'N' -o $user_choice = 'n' ]; then
+    if [ $user_choice = 'N' -o $user_choice = 'n' ]; then
         echo "O script configura o VIM a partir de um modelo pré-existente, por isso é preciso excluir o arquivo anterior."
         exit 0
-    elif [ $user_choice = 'S' -o $user_choice = 's']; then
+    elif [ $user_choice = 'S' -o $user_choice = 's' ]; then
         echo " Excluindo o arquivo .vimrc..."
         rm -f /home/$username/.vimrc
     else
@@ -77,6 +87,7 @@ else
         echo "Arquivo não encontrado ou vazio."
         echo "Verifique se o arquivo .vimrc existe no mesmo diretório do script executado e se contém as configuração necessário e tente novemente."
         exit 0
+    fi
 fi
 
 echo "Copiando as cofiguração do gerenciador de plugins para o diretório /home/$username/.vim/autoload/"
