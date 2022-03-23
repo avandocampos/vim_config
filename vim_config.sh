@@ -1,22 +1,44 @@
 #!/bin/bash
 
 # Atualizando as informações do repositório
-# sudo apt-get update
-dnf update -y
-# Verifica se os aplicativos necesários estão instalados
-if [ ! $(command -v vim) ]; then
-    # apt-get install -y vim
-    dnf install -y vim
+
+if [ $(command -v dnf) ]; then
+    dnf update -y
+    # Verifica se os aplicativos necesários estão instalados
+    if [ ! $(command -v vim) ]; then
+        # apt-get install -y vim
+        dnf install -y vim
+    fi
+
+    if [ ! $(command -v git) ]; then
+        # apt-get install -y git
+        dnf install -y git
+    fi
+
+    if [ ! $(command -v curl) ]; then
+        # apt-get install -y curl
+        dnf install -y curl
+    fi
 fi
 
-if [ ! $(command -v git) ]; then
-   # apt-get install -y git
-   dnf install -y git
-fi
+if [ $(command -v apt) -a $(command -v apt-get) ]; then
+    apt-get update
+    
+    # Verifica se os aplicativos necesários estão instalados
+    if [ ! $(command -v vim) ]; then
+        # apt-get install -y vim
+        apt-get install -y vim
+    fi
 
-if [ ! $(command -v curl) ]; then
-   # apt-get install -y curl
-   dnf install -y curl
+    if [ ! $(command -v git) ]; then
+        # apt-get install -y git
+        apt-get install -y git
+    fi
+
+    if [ ! $(command -v curl) ]; then
+        # apt-get install -y curl
+        apt-get install -y curl
+    fi
 fi
 
 echo -ne "Digite o usuário para o qual deseja configurar o VIM: "
@@ -75,9 +97,9 @@ if [ -e /home/$username/.vimrc ]; then
     fi
 else
     echo "O arquivo não existe ou está vazio!"
-    if [ -e .vimrc -a -s .vimrc ]; then
+    if [ -e pre-config.txt -a -s pre-config.txt ]; then
         echo "Copiando o arquivo de configuração..."
-        cp .vimrc /home/$username/.
+        cp pre-config.txt /home/$username/.vimrc
     else
         echo "Houve um erro ao procurar pelo arquivo .vimrc."
         echo "Arquivo não encontrado ou vazio."
