@@ -9,3 +9,5 @@ Simples script para configuração automática do VIM com alguns plugins e itens
 2. Deve ser executado como sudo. É recomendado que o script seja alterado para execução antes de executar de fato com chmod +x vim_config.sh.
 
 3. O script não se aplica ao usuário root por este ter um diretório home em local diferente. Isto é algo que também pode ser facilmente modificado mas é bem pouco recomendado.
+
+4. O plugin floaterm não funciona em VIM's anteriores à versão 8, portanto, deve ser verificada essa condição antes de instalá-lo. 
