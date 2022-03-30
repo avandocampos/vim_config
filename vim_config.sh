@@ -121,6 +121,7 @@ git clone https://github.com/voldikss/vim-floaterm /home/$username/.vim/bundle/f
 # Mudando o usuário e grupo dos diretórios criados
 # Os diretórios são criados como root porque o script é executando com sudo
 chown -R $username:$username /home/$username/.vim
+chown $username:$username /home/$username/.vimrc
 
 echo "Os seguintes plugins foram instalados"
 echo "nerdtree"
